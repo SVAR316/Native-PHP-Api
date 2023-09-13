@@ -5,7 +5,7 @@ header("Content-type: json/application");
 
 //Подключение файлов
 $connect = require 'db.php';
-require 'get_func/get_controller.php';
+$get_controller = require 'get_func/get_controller.php';
 
 
 // получение параметра после http://example/
@@ -16,10 +16,10 @@ $query = $params[0];
 if($query === "users"){
     if(isset($params[1]))
     {
-        getUser($connect, $params[1]);
+        $get_controller->getUser($connect, $params[1]);
     }else
     {
-        getUsers($connect);
+        $get_controller->getUsers($connect);
     }
 }else {
     http_response_code(404);
