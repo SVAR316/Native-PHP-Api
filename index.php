@@ -7,10 +7,12 @@ $connect = require 'db.php';
 $get_service_file = require 'get_func/get_service.php';
 $post_service_file = require 'post_func/post_service.php';
 $patch_service_file = require 'patch_func/patch_service.php';
+$delete_service_file = require 'delete_func/delete_service.php';
 //Создание экземпляра класса
 $get_service = new getController();
 $post_service = new postController();
 $patch_service = new patchController();
+$delete_service = new deleteService();
 
 
 // получение параметра после http://example/
@@ -56,14 +58,26 @@ elseif($method === 'POST')
             break;
     }
 }
-elseif($method == 'PATCH')
+elseif($method === 'PATCH')
 {
     switch($query)
     {
         case "users":
-                $patch_service->changeUser($connect, file_get_contents('php://input'));
+                $patch_service->changeUser($connect, file_get_contents('php://input'), $content_type);
             break;
 
+        default:
+            http_response_code(404);
+            echo json_encode(["error" => true]);
+            break;
+    }
+}
+elseif($method === 'DELETE')
+{
+    switch ($query){
+        case "users":
+                $delete_service->deleteUser($connect, file_get_contents('php://input'), $content_type);
+            break;
         default:
             http_response_code(404);
             echo json_encode(["error" => true]);
